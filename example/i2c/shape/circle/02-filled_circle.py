@@ -12,6 +12,6 @@ oled = SSD1306_I2C(128, 64, oled_Pin)
 oled.fill(0)
 
 # Draw Filled Circle
-#      x  y  r  color filled?
+#      x  y  r  color fill?
 oled.circle(60,30,25,1,1)
 oled.show()
