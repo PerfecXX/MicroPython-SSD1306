@@ -1,7 +1,5 @@
 from machine import Pin, SoftI2C
 from ssd1306 import SSD1306_I2C
-from framebuf import FrameBuffer,MONO_HLSB
-from images import kmitl_logo,cu_logo
 from time import sleep
 
 # Initialize I2C and the OLED display
