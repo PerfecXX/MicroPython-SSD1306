@@ -21,5 +21,5 @@ sleep(1)
 
 # Points for rectangle
 points = [(20, 20), (20, 50), (100, 50), (100, 20)]  # Rectangle with 4 points
-oled.polygon(points, color=1, fill=True)  # Draw rectangle outline
+oled.polygon(points, color=1, fill=True)  # Draw filled rectangle
 oled.show()
