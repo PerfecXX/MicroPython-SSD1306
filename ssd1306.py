@@ -469,6 +469,65 @@ class SSD1306:
                     for x in range(x_start, x_end + 1):
                         self.pixel(x, y, color)
     
+    def ellipse(self, cx, cy, rx, ry, color, fill=False):
+        """
+        Draw an ellipse defined by center (cx, cy) and radii rx (horizontal) and ry (vertical) with the specified color.
+
+        Parameters:
+            cx, cy (int): The center coordinates of the ellipse.
+            rx (int): The horizontal radius of the ellipse.
+            ry (int): The vertical radius of the ellipse.
+            color (int): The color of the ellipse (0 for off, 1 for on).
+            fill (bool): Whether to fill the ellipse (default is False, i.e., outline only).
+        """
+        if fill:
+            # Fill the ellipse using the parametric equation
+            for y in range(cy - ry, cy + ry + 1):
+                dx = int(rx * (1 - ((y - cy) ** 2 / ry ** 2)) ** 0.5)
+                for x in range(cx - dx, cx + dx + 1):
+                    self.pixel(x, y, color)
+        else:
+            # Outline the ellipse (using a midpoint ellipse algorithm)
+            x = 0
+            y = ry
+            p1 = ry * ry - rx * rx * ry + 0.25 * rx * rx
+            dx = 2 * ry * ry * x
+            dy = 2 * rx * rx * y
+
+            # Region 1 (Above the center)
+            while dx < dy:
+                self.pixel(cx + x, cy + y, color)
+                self.pixel(cx - x, cy + y, color)
+                self.pixel(cx + x, cy - y, color)
+                self.pixel(cx - x, cy - y, color)
+                
+                x += 1
+                dx += 2 * ry * ry
+                if p1 < 0:
+                    p1 += dx + ry * ry
+                else:
+                    y -= 1
+                    dy -= 2 * rx * rx
+                    p1 += dx - dy + ry * ry
+            
+            # Region 2 (Below the center)
+            p2 = ry * ry * (x + 0.5) ** 2 + rx * rx * (y - 1) ** 2 - rx * rx * ry * ry
+            while y >= 0:
+                self.pixel(cx + x, cy + y, color)
+                self.pixel(cx - x, cy + y, color)
+                self.pixel(cx + x, cy - y, color)
+                self.pixel(cx - x, cy - y, color)
+                
+                y -= 1
+                dy -= 2 * rx * rx
+                if p2 > 0:
+                    p2 += rx * rx - dy
+                else:
+                    x += 1
+                    dx += 2 * ry * ry
+                    p2 += dx - dy + rx * rx
+
+    
     def _find_intersections(self, x1, y1, x2, y2, dx, dy, y, intersections):
         """
         Find the intersection of the line (x1, y1) -> (x2, y2) with the horizontal line at y.
@@ -483,6 +542,57 @@ class SSD1306:
         if (y1 <= y < y2) or (y2 <= y < y1):  # Check if the horizontal line crosses the segment
             x_intersection = x1 + (y - y1) * (x2 - x1) / (y2 - y1)
             intersections.append(int(x_intersection))
+            
+    def round_rect(self, x, y, w, h, color, filled=False, radius=0):
+        """
+        Draw a rectangle with optional rounded corners.
+
+        Parameters:
+            x, y (int): The starting coordinates of the rectangle.
+            w, h (int): The width and height of the rectangle.
+            color (int): The color of the rectangle (0 for off, 1 for on).
+            filled (bool): Whether the rectangle should be filled (default is False).
+            radius (int): The radius for rounded corners (default is 0 for sharp corners).
+        """
+        if radius > 0:
+            # Draw the rounded corners using arcs
+            self.arc(x + radius, y + radius, radius, 180, 270, color)  # top-left
+            self.arc(x + w - radius - 1, y + radius, radius, 270, 360, color)  # top-right
+            self.arc(x + radius, y + h - radius - 1, radius, 90, 180, color)  # bottom-left
+            self.arc(x + w - radius - 1, y + h - radius - 1, radius, 0, 90, color)  # bottom-right
+
+        # Draw the four straight sides (with or without filling)
+        if filled:
+            self.fill_rect(x + radius, y, w - 2 * radius, h, color)  # top
+            self.fill_rect(x + radius, y + h - 1, w - 2 * radius, -h + 2 * radius, color)  # bottom
+            self.fill_rect(x, y + radius, w, h - 2 * radius, color)  # left
+            self.fill_rect(x + w - 1, y + radius, -w + 2 * radius, h - 2 * radius, color)  # right
+        else:
+            # Draw the outline of the rectangle (with rounded corners)
+            self.line(x + radius, y, x + w - radius - 1, y, color)  # top
+            self.line(x + radius, y + h - 1, x + w - radius - 1, y + h - 1, color)  # bottom
+            self.line(x, y + radius, x, y + h - radius - 1, color)  # left
+            self.line(x + w - 1, y + radius, x + w - 1, y + h - radius - 1, color)  # right
+
+    def arc(self, cx, cy, r, start_angle, end_angle, color):
+        """
+        Draw an arc (part of a circle) for rounded corners.
+
+        Parameters:
+            cx, cy (int): The center coordinates of the arc.
+            r (int): The radius of the arc.
+            start_angle, end_angle (int): The start and end angles in degrees.
+            color (int): The color of the arc (0 for off, 1 for on).
+        """
+        start_angle = math.radians(start_angle)  # Convert to radians
+        end_angle = math.radians(end_angle)
+
+        step = 1 / r  # Control the smoothness of the curve
+        for angle in range(int(start_angle * 180 / math.pi), int(end_angle * 180 / math.pi)):
+            angle_rad = angle * math.pi / 180
+            x = int(cx + r * math.cos(angle_rad))
+            y = int(cy + r * math.sin(angle_rad))
+            self.pixel(x, y, color)
 
     # Abstract methods for communication to be implemented in subclasses
     def write_cmd(self, cmd):
@@ -581,3 +691,4 @@ class SSD1306_SPI(SSD1306):
         self.cs.low()
         self.spi.write(buf)
         self.cs.high()
+
