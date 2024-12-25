@@ -3,7 +3,7 @@ from micropython import const
 import framebuf
 import math
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __author__ = 'Teeraphat Kullanankanjana'
 
 # Register definitions
