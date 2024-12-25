@@ -3,7 +3,7 @@ from micropython import const
 import framebuf
 import math
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 __author__ = 'Teeraphat Kullanankanjana'
 
 # Register definitions
@@ -409,22 +409,26 @@ class SSD1306:
                 intersections = []
 
                 # Find intersections with the parallelogram's edges
-                # Check all four edges (pairs of points)
-                self._find_intersections(x1, y1, x2, y2, dx1, dy1, y, intersections)
-                self._find_intersections(x2, y2, x4, y4, dx2, dy2, y, intersections)
-                self._find_intersections(x4, y4, x3, y3, -dx1, -dy1, y, intersections)
-                self._find_intersections(x3, y3, x1, y1, -dx2, -dy2, y, intersections)
+                self._find_intersections(x1, y1, x2, y2, y, intersections)
+                self._find_intersections(x2, y2, x4, y4, y, intersections)
+                self._find_intersections(x4, y4, x3, y3, y, intersections)
+                self._find_intersections(x3, y3, x1, y1, y, intersections)
+
+                # Remove duplicate intersections
+                intersections = list(set(intersections))
 
                 # Sort the intersection points
                 intersections.sort()
 
                 # Fill between pairs of intersection points
                 for i in range(0, len(intersections), 2):
-                    x_start = intersections[i]
-                    x_end = intersections[i + 1]
-                    # Draw the horizontal line between the intersection points
-                    for x in range(x_start, x_end + 1):
-                        self.pixel(x, y, color)
+                    if i + 1 < len(intersections):  # Ensure there is a pair
+                        x_start = intersections[i]
+                        x_end = intersections[i + 1]
+                        # Draw the horizontal line between the intersection points
+                        for x in range(x_start, x_end + 1):
+                            self.pixel(x, y, color)
+
     
     def trapezium(self, x1, y1, x2, y2, x3, y3, x4, y4, color, fill=False):
         """
@@ -691,4 +695,3 @@ class SSD1306_SPI(SSD1306):
         self.cs.low()
         self.spi.write(buf)
         self.cs.high()
-
