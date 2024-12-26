@@ -11,4 +11,15 @@ Since this is an external library, which means you have to install it on your bo
 There are 2 ways to install the library (choose one):
 
 1. Manually upload the library file to your board.
-2. Use Package 
+   - Go to this repository: https://github.com/JASchilz/uQR.
+   - Upload the `uQR.py` to your board.
+2. Use Thonny Package Manager.
+   - Open Thonny IDE. 
+   - At the top menu, click tools and select `Manage Packages`.
+   - In the search box, search for `micropython-qr` and install it to your board.
+
+After library installation is complete, you can see the library file in your board.
+
+You can test the code based on the installation method
+- If you install with the Thonny IDE package manager, try this file: [01-show_qr.py](https://github.com/PerfecXX/MicroPython-SSD1306/blob/main/example/i2c/QRCode/01-show_qr.py)
+- If you manually install, try this file: [02-show_qr.py](https://github.com/PerfecXX/MicroPython-SSD1306/blob/main/example/i2c/QRCode/02-show_qr.py)
