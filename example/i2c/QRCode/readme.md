@@ -2,8 +2,8 @@
 
 In order to show a QR code on your OLED display, you can use the following method:
 
-1. Use the external MicroPython QR code library.
-2. Convert your QR code image to a byte array.
+1. [Use the external MicroPython QR code library.](https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/QRCode#method1---use-external-micropython-qr-code-library)
+2. [Convert your QR code image to a byte array.](https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/QRCode#method2---convert-your-qr-code-image-to-a-byte-array)
 
 # Method1 - Use external MicroPython QR Code Library
 
