@@ -1,5 +1,11 @@
 # MicroPython QR Code
 
+<div style="text-align: center;">
+    <a href="https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/QRCode">
+        <img src="https://github.com/PerfecXX/MicroPython-SSD1306/blob/main/doc/img/Doc_QRcode_01-show_qr.png" alt="QRCode" style="width: 20%;">
+    </a>
+</div>
+
 In order to show a QR code on your OLED display, you can use the following method:
 
 1. [Use the external MicroPython QR code library.](https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/QRCode#method1---use-external-micropython-qr-code-library)
