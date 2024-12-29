@@ -152,6 +152,7 @@ oled.show()
 sleep(1)
 
 #---Show Text---
+oled.fill(0)
 oled.text("Test Complete!",0,0)
 oled.show()
 sleep(5)
