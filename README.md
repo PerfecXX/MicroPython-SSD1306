@@ -5,6 +5,14 @@
 
 MicroPython Library for SSD1306 OLED Displays with some simple shape drawing functions.
 
+# Installation
+- Manual Installation
+  - Upload the ```ssd1306.py``` file to your device.
+- Thonny IDE Package Manager
+  - Open Thonny IDE.
+  - Go to Tools > Manage Packages.
+  - Search for ```micropython-ssd1306-driver``` and install it.
+
 # Example Usage
 - [Screen Control](https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/screen%20control)
 - [Text](https://github.com/PerfecXX/MicroPython-SSD1306/tree/main/example/i2c/text)
