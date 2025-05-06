@@ -27,7 +27,6 @@ MicroPython Library for SSD1306 OLED Displays with some simple shape drawing fun
 # Import Library
 from ssd1306 import SSD1306_I2C
 from machine import Pin,SoftI2C
-from time import sleep
 
 # Pin Setup
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
